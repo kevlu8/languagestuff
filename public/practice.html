@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>pratice</title>
+</head>
+<body>
+	<!-- checkboxes for parameters -->
+	<label for="ctoe">Canto -> English</label>
+	<input type="checkbox" name="ctoe" id="ctoe" checked>
+	<br />
+	<label for="etoc">English -> Canto</label>
+	<input type="checkbox" name="etoc" id="etoc" checked>
+	<br />
+	<label for="strict">Strict checking</label>
+	<input type="checkbox" name="strict" id="strict" checked>
+	<br />
+	<label for="tone">Tonal</label>
+	<input type="checkbox" name="tone" id="tone" checked>
+	<br />
+	<!-- 
+		- "canto -> eng"
+		- "eng" -> "canto"
+		- "strict checking" (j -> y)
+		- "tonal"
+	-->
+	<!-- input for text -->
+	<p id="word"></p>
+	<input type="text" name="input" id="input" autocomplete="off">
+	<button onclick="check()">Check</button>
+
+	<script>
+		let words = [];
+
+		function update() {
+			document.getElementById("word").innerHTML = words[0];
+		}
+
+		function newWord() {
+			fetch("/get").then(res => res.json()).then((res) => {
+				words = res;
+				let etoc = document.getElementById("etoc").checked;
+				let ctoe = document.getElementById("ctoe").checked;
+				if (etoc && ctoe) {
+					Math.round(Math.random()) ? words.reverse() : words;
+				} else if (etoc) {
+					words.reverse();
+				} else if (!etoc && !ctoe) {
+					alert("Please select at least one direction");
+					return;
+				}
+				update();
+			});
+		}
+
+		function check() {
+			const strict = document.getElementById("strict").checked;
+			const tone = document.getElementById("tone").checked;
+			let input = document.getElementById("input").value;
+			document.getElementById("input").value = "";
+			let ans = words[1];
+
+			if (!tone) {
+				// remove all numbers
+				ans = ans.replace(/\d/g, "");
+			}
+			if (!strict) {
+				for (let i = 0; i < input.length; i++) {
+					console.log(input[i], ans[i]);
+					if (input[i] == "j" && ans[i] == "y")
+						continue;
+					if (input[i] == "y" && ans[i] == "j")
+						continue;
+					if (input[i] == "l" && ans[i] == "n")
+						continue;
+					if (input[i] == "n" && ans[i] == "l")
+						continue;
+					if (input.length != ans.length || input[i] != ans[i]) {
+						alert(`Wrong! Answer was ${words[1]}`);
+						break;
+					}
+				}
+				newWord();
+				return;
+			}
+			if (input != ans) {
+				alert(`Wrong! Answer was ${words[1]}`);
+				newWord();
+			} else {
+				newWord();
+			}
+		}
+
+		document.getElementById("input").addEventListener("keydown", (e) => {
+			if (e.key == "Enter") {
+				check();
+			}
+		});
+
+		newWord();
+	</script>
+</body>
+</html>

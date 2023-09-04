@@ -44,7 +44,7 @@ app.post('/add', (req, res) => {
 	const newMeaning = req.body.meaning;
 	const newPair = newWord + ' ' + newMeaning;
 	dict.push(newPair);
-	fs.appendFile(path.join(__dirname, '../dict.txt'), newPair + '\n');
+	fs.appendFile(path.join(__dirname, '../dict.txt'), newPair + '\n', () => {});
 	res.send('Added ' + newPair);
 });
 

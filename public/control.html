@@ -11,6 +11,10 @@
 
 	<button onclick="fuck()">add</button>
 	<button onclick="shit()">remove</button>
+
+	<div>
+		<a id="status"></a>
+	</div>
 </body>
 <script> 
 function fuck() {
@@ -25,7 +29,12 @@ function fuck() {
 			word: canto,
 			meaning: english,
 		}),
-	})
+	}).then(() => {
+		document.getElementById("status").innerText = "success!";
+		setTimeout(() => {
+			document.getElementById("status").innerText = "";
+		}, 1500);
+	});
 }
 
 function shit() {
@@ -39,7 +48,12 @@ function shit() {
 			word: canto,
 			meaning: english,
 		}),
-	})
+	}).then(() => {
+		document.getElementById("status").innerText = "success!";
+		setTimeout(() => {
+			document.getElementById("status").innerText = "";
+		}, 1500);
+	});
 }
 </script>
 </html>

@@ -61,7 +61,7 @@ app.post('/delete', (req, res) => {
 	}
 
 	// rewrite the dict
-	fs.writeFile(path.join(__dirname, '../dict.txt'), dict.join('\n'));
+	fs.writeFile(path.join(__dirname, '../dict.txt'), dict.join('\n') + '\n', () => {});
 	res.end();
 });
 

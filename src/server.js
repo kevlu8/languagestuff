@@ -16,6 +16,20 @@ const dict = fs.readFileSync(path.join(__dirname, '../dict.txt'), 'utf8').split(
 // delete last empty line
 dict.pop();
 
+// shuffle array
+function shuffle() {
+	for (let i = 0; i < dict.length; i++) {
+		const random = Math.floor(Math.random() * dict.length);
+		const temp = dict[i];
+		dict[i] = dict[random];
+		dict[random] = temp;
+	}
+}
+
+shuffle();
+
+let dictidx = 0;
+
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
@@ -33,8 +47,12 @@ app.get('/control', (req, res) => {
 
 app.get('/get', (req, res) => {
 	// get a random word paired with its meaning
-	const random = Math.floor(Math.random() * dict.length);
-	const pair = dict[random].split(' ');
+	if (dictidx === dict.length) {
+		dictidx = 0;
+		shuffle();
+	}
+	const pair = dict[dictidx].split(' ');
+	dictidx++;
 	res.send(pair);
 });
 

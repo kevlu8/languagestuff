@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/kevlu8/languagestuff/issues"
   },
-  "homepage": "https://github.com/kevlu8/languagestuff#readme"
+  "homepage": "https://github.com/kevlu8/languagestuff#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.6"
+  }
 }

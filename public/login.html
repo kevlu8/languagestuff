@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>login</title>
+</head>
+<body>
+	<input type="text" name="password" id="pass" placeholder="password" autocomplete="off">
+	<button onclick="login()">login</button>
+</body>
+<script>
+	function login() {
+		let pass = document.getElementById("pass").value;
+		// set cookie "password" to pass
+		document.cookie = "password=" + pass;
+		// redirect to /fs
+		window.location.href = "/fs";
+	}
+</script>
+</html>

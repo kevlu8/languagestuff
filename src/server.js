@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 // path
 const path = require('path');
@@ -31,21 +32,50 @@ shuffle();
 let dictidx = 0;
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
-	// send main.html
-	res.sendFile(path.join(__dirname, '../public/main.html'));
+	res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
-app.get('/practice', (req, res) => {
-	res.sendFile(path.join(__dirname, '../public/practice.html'));
+app.get('/login', (req, res) => {
+	res.sendFile(path.join(__dirname, '../public/login.html'));
 });
 
-app.get('/control', (req, res) => {
-	res.sendFile(path.join(__dirname, '../public/control.html'));
+app.get('/fs*', (req, res) => {
+	// check if user has cookie password: "$ecr3tFS"
+	if (req.cookies.password != "$ecr3tFS") {
+		res.send("You don't have permission to access this page.");
+		return;
+	}
+	let filepath = req.path;
+	filepath = filepath.substring(3);
+	if (filepath === "") filepath = "/";
+	// check if it's a folder
+	if (fs.statSync(filepath).isDirectory()) {
+		let ret = "";
+		let files = fs.readdirSync(filepath);
+		for (let i = 0; i < files.length; i++) {
+			ret += files[i] + "\n";
+		}
+		res.send(ret);
+		return;
+	}
+	fs.readFile(filepath, (err, data) => {
+		if (err) {
+			console.log(err);
+			res.send(err);
+		} else {
+			res.send(data);
+		}
+	});
 });
 
-app.get('/get', (req, res) => {
+app.get('/canto', (req, res) => {
+	res.sendFile(path.join(__dirname, '../public/canto.html'));
+});
+
+app.get('/canto/get', (req, res) => {
 	// get a random word paired with its meaning
 	if (dictidx === dict.length) {
 		dictidx = 0;
@@ -56,7 +86,7 @@ app.get('/get', (req, res) => {
 	res.send(pair);
 });
 
-app.post('/add', (req, res) => {
+app.post('/canto/add', (req, res) => {
 	// add a new word to the dict
 	const newWord = req.body.word;
 	const newMeaning = req.body.meaning;
@@ -66,7 +96,7 @@ app.post('/add', (req, res) => {
 	res.send('Added ' + newPair);
 });
 
-app.post('/delete', (req, res) => {
+app.post('/canto/delete', (req, res) => {
 	// delete a word from the dict
 	const wordToDelete = req.body.word;
 

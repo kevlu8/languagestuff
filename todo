@@ -1,4 +1,2 @@
-- everything on 1 page
-- merge w/ other project (lcoalhost:3001)
 - list of words you got wrong
-- replace spaces in user input with nothing
+- server shuffles order of dict words when saving, this doesn't feel right but idk if it's a problem

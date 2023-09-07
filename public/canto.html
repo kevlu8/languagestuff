@@ -29,6 +29,16 @@
 	<p id="word"></p>
 	<input type="text" name="input" id="input" autocomplete="off">
 	<button onclick="check()">Check</button>
+	<br /><br />
+	<input id="canto" type="text" autocomplete="off" placeholder="jyutping"/>
+	<input id="english" type="text" autocomplete="off" placeholder="meaning"/>
+
+	<button onclick="fuck()">add</button>
+	<button onclick="shit()">remove</button>
+
+	<div>
+		<a id="status"></a>
+	</div>
 
 	<script>
 		let words = [];
@@ -38,7 +48,7 @@
 		}
 
 		function newWord() {
-			fetch("/get").then(res => res.json()).then((res) => {
+			fetch("/canto/get").then(res => res.json()).then((res) => {
 				words = res;
 				let etoc = document.getElementById("etoc").checked;
 				let ctoe = document.getElementById("ctoe").checked;
@@ -60,7 +70,9 @@
 			let input = document.getElementById("input").value;
 			document.getElementById("input").value = "";
 			let ans = words[1];
-
+			
+			// remove all spaces
+			input = input.replace(/\s/g, "");
 			if (!tone) {
 				// remove all numbers
 				ans = ans.replace(/\d/g, "");
@@ -99,6 +111,45 @@
 		});
 
 		newWord();
+
+		function fuck() {
+			let canto = document.getElementById("canto").value;
+			let english = document.getElementById("english").value;
+
+			// send post to server: /add with req.word being canto and req.meaning being englsih
+			fetch("/canto/add", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					word: canto,
+					meaning: english,
+				}),
+			}).then(() => {
+				document.getElementById("status").innerText = "success!";
+				setTimeout(() => {
+					document.getElementById("status").innerText = "";
+				}, 1500);
+			});
+		}
+
+		function shit() {
+			let canto = document.getElementById("canto").value;
+
+			// send post to server: /delete with req.word being canto
+			fetch("/canto/delete", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					word: canto,
+					meaning: english,
+				}),
+			}).then(() => {
+				document.getElementById("status").innerText = "success!";
+				setTimeout(() => {
+					document.getElementById("status").innerText = "";
+				}, 1500);
+			});
+		}
 	</script>
 </body>
 </html>

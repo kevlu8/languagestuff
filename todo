@@ -1,2 +1,3 @@
-- list of words you got wrong
+- list of words you got wrong (to redo)
 - server shuffles order of dict words when saving, this doesn't feel right but idk if it's a problem
+- rewrite system for dict words as it dies when 2 people are on at once

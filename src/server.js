@@ -19,11 +19,9 @@ dict.pop();
 
 // shuffle array
 function shuffle() {
-	for (let i = 0; i < dict.length; i++) {
-		const random = Math.floor(Math.random() * dict.length);
-		const temp = dict[i];
-		dict[i] = dict[random];
-		dict[random] = temp;
+	for (var i = 0; i < dict.length-1; i++) {
+		let j = Math.floor(Math.random() * (dict.length - i)) + i;
+		[dict[i], dict[j]] = [dict[j], dict[i]];
 	}
 }
 
